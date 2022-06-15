@@ -12,14 +12,15 @@ New-Item -ItemType Directory -Path CustomISO\FinalIso
 New-Item -ItemType Directory -Path CustomISO\UnattendXML
 New-Item -ItemType Directory -Path CustomISO\Temp
 New-Item -ItemType Directory -Path CustomISO\Temp\WorkingFolder
+New-Item -ItemType Directory -Path CustomISO\Temp\WorkingFolder\CustomFolder
 New-Item -ItemType Directory -Path CustomISO\Temp\VMwareTools
 New-Item -ItemType Directory -Path CustomISO\Temp\MountDISM
 
-# 2. Prepare path for the Windows ISO destination file
-$SourceWindowsIsoFullName = $iso.split("\")[-1]
-$DestinationWindowsIsoPath = "$pwd\CustomISO\FinalIso\" +  ($SourceWindowsIsoFullName -replace ".iso","") + "$tag.iso"
+# # 2. Prepare path for the Windows ISO destination file
+# $SourceWindowsIsoFullName = $iso.split("\")[-1]
+$DestinationWindowsIsoPath = "$pwd\CustomISO\FinalIso\$tag.iso"
 
-# 3. Get the ISO Full Path
+# # 3. Get the ISO Full Path
 $ISOFullPath = Get-ChildItem -Path $iso -Filter $iso -Recurse | %{$_.FullName}
 
 # 4. Download VMware Tools ISO  
@@ -45,7 +46,6 @@ Copy-Item $DriveSourceWindowsIso\* -Destination "$pwd\CustomISO\Temp\WorkingFold
 get-childitem "$pwd\CustomISO\Temp\WorkingFolder" -recurse | %{ if (! $_.psiscontainer) { $_.isreadonly = $false } }
 
 # 8. Copy VMware tools exe in a custom folder in the future ISO
-New-Item -ItemType Directory -Path "$pwd\CustomISO\Temp\WorkingFolder\CustomFolder"
 #For 64 bits by default.
 Copy-Item "$DriveVMwareToolsIso\setup64.exe" -Destination 'CustomISO\Temp\WorkingFolder\CustomFolder'
 
@@ -93,13 +93,13 @@ $data = '2#p0,e,b"{0}"#pEF,e,b"{1}"' -f $etfsboot, $efisys
 start-process $oscdimg -args @("-bootdata:$data",'-u2','-udfver102', $ISO_WORKINGFOLDER, $DestinationWindowsIsoPath) -wait -nonewwindow
 
 # 13. Save the final ISO
-$FinaISOName = ($SourceWindowsIsoFullName -replace "$tag.iso","")
-$FinalISOFullPath = Get-ChildItem -Path  $FinaISOName -Filter $FinaISOName -Recurse | %{$_.FullName}
+$FinalISOFullPath = Get-ChildItem -Path  "$tag.iso" -Filter "$tag.iso" -Recurse | %{$_.FullName}
+Write-Host $FinalISOFullPath
 
 # 14. Dismount the ISOs files
 Dismount-DiskImage -ImagePath $ISOFullPath
 Dismount-DiskImage -ImagePath $VMwareToolsIsoFullPath
 
-# 15. Move the Final ISO to the desktop folder ad delete the customISO folder
+# # 15. Move the Final ISO to the desktop folder ad delete the customISO folder
 Move-Item -Path $FinalISOFullPath -Destination "C:\Users\admin\Desktop\customiso\windows\$tag.iso"
 Remove-Item -Path "$pwd\CustomISO\" -Force -Recurse

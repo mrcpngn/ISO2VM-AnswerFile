@@ -1,0 +1,33 @@
+Datecreated: 15/06/2022
+
+About: 
+This script will automatically create a Windows custom ISO file with VMwareTools preinstalled.
+
+Things to Note:
+1. Before you start you must install first Windows ADK:
+https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install
+2. Place the ISO file with the same path of the 'create-winiso-vmwaretools.ps1' script.
+3. The script must be run in Administrative privileges.
+4. You must supply your own ISO file.
+5. You can use the included unattened-xml or you can use your own.
+6. You can use the default vmwaretools version to install.
+
+Steps:
+1. Open powershell with administrator privileges 
+2. Go to the directory custom-iso-windows
+    cd C:\Users\admin\Desktop\customiso\custom-iso-windows\
+3. Choose your preffered autounattend.xml and tagname
+4. Execute the script.
+5. Final ISO will be saved on C:\Users\admin\Desktop\customiso\windows directory
+
+Syntax:
+.\create-winiso-vmwaretools.ps1 -iso <iso_file> `
+-xml <unattended-xml> `
+-url <vmwaretools-url> `
+-tag <new-iso-name>
+
+Sample:
+.\create-winiso-vmwaretools.ps1 -iso 17763.1158.200413-1759.rs5_release_svc_refresh_SERVER_EVAL_x64FRE_ja-jp.iso `
+-xml win2019_bios_autounattend_JA.xml `
+-url https://packages.vmware.com/tools/esx/7.0u3/windows/VMware-tools-windows-11.3.0-18090558.iso `
+-tag VMware-demo-v0

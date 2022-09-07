@@ -20,7 +20,7 @@ Steps:
 5. Final ISO will be saved on C:\Users\admin\Desktop\customiso\windows directory
 
 Syntax:
-.\create-winiso-vmwaretools.ps1 -iso <iso_file> -xml <unattended-xml> -url <vmwaretools-url> -tag <new-iso-name>
+.\create-winiso-vmwaretools.ps1 -iso <iso_file> -xml <unattended_xml> -url <vmwaretools_url> -tag <new_iso_name>
 
 Sample:
 .\create-winiso-vmwaretools.ps1 -iso Windows-2019-EN.iso -xml win2019-autounattend-en.xml -url https://packages.vmware.com/tools/esx/7.0u3/windows/VMware-tools-windows-11.3.0-18090558.iso -tag golden-iso-v1.0

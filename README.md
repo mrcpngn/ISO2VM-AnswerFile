@@ -1,7 +1,6 @@
-Datecreated: 15/06/2022
+# Automate Windows Server Installation
 
-About: 
-This script will automatically create a Windows custom ISO file with VMwareTools preinstalled.
+This script will automatically create a Windows Server ISO file with VMwareTools preinstalled.
 
 Things to Note:
 1. Before you start you must install first Windows ADK:

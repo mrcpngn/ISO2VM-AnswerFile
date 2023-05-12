@@ -3,13 +3,13 @@
     <settings pass="windowsPE">
         <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <SetupUILanguage>
-                <UILanguage>en-US</UILanguage>
+                <UILanguage>ja-JP</UILanguage>
             </SetupUILanguage>
-            <InputLocale>en-US</InputLocale>
-            <SystemLocale>en-US</SystemLocale>
-            <UILanguage>en-US</UILanguage>
+            <InputLocale>ja-JP</InputLocale>
+            <SystemLocale>ja-JP</SystemLocale>
+            <UILanguage>ja-JP</UILanguage>
             <UILanguageFallback></UILanguageFallback>
-            <UserLocale>en-US</UserLocale>
+            <UserLocale>ja-JP</UserLocale>
         </component>
         <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <ImageInstall>
@@ -22,7 +22,7 @@
                     </InstallFrom>
                     <InstallTo>
                         <DiskID>0</DiskID>
-                        <PartitionID>3</PartitionID>
+                        <PartitionID>4</PartitionID>
                     </InstallTo>
                     <WillShowUI>OnError</WillShowUI>
                     <InstallToAvailablePartition>false</InstallToAvailablePartition>
@@ -40,18 +40,26 @@
             <DiskConfiguration>
                 <Disk wcm:action="add">
                     <CreatePartitions>
+                        <!-- Recovery/utility partition -->
                         <CreatePartition wcm:action="add">
                             <Order>1</Order>
+                            <Size>500</Size>
+                            <Type>Primary</Type>
+                        </CreatePartition>
+                        <!-- EFI system partition (ESP) -->
+                        <CreatePartition wcm:action="add">
+                            <Order>2</Order>
                             <Size>100</Size>
                             <Type>EFI</Type>
                         </CreatePartition>
+                        <!-- Reserve partition -->
                         <CreatePartition wcm:action="add">
-                            <Order>2</Order>
-                            <Size>128</Size>
+                            <Order>3</Order>
+                            <Size>16</Size>
                             <Type>MSR</Type>
                         </CreatePartition>
                         <CreatePartition wcm:action="add">
-                            <Order>3</Order>
+                            <Order>4</Order>
                             <Type>Primary</Type>
                             <Extend>true</Extend>
                         </CreatePartition>
@@ -59,16 +67,18 @@
                     <DiskID>0</DiskID>
                     <WillWipeDisk>true</WillWipeDisk>
                     <ModifyPartitions>
+                        <!-- Recovery/utility partition -->
                         <ModifyPartition wcm:action="add">
                             <Order>1</Order>
                             <PartitionID>1</PartitionID>
-                            <Label>System</Label>
-                            <Format>FAT32</Format>
+                            <Label>Recovery</Label>
+                            <Format>NTFS</Format>
+                            <TypeID>de94bba4-06d1-4d40-a16a-bfd50179d6ac</TypeID>
                         </ModifyPartition>
+                        <!-- OS partition -->
                         <ModifyPartition wcm:action="add">
                             <Order>2</Order>
-                            <PartitionID>3</PartitionID>
-                            <Label>Windows</Label>
+                            <PartitionID>4</PartitionID>
                             <Letter>C</Letter>
                             <Format>NTFS</Format>
                         </ModifyPartition>
@@ -81,15 +91,17 @@
     <settings pass="oobeSystem">
         <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <UserAccounts>
+                <!-- Set Administrator Password -->
                 <AdministratorPassword>
-                    <Value>UABhAHMAcwB3ADAAcgBkACEAQQBkAG0AaQBuAGkAcwB0AHIAYQB0AG8AcgBQAGEAcwBzAHcAbwByAGQA</Value>
-                    <PlainText>false</PlainText>
+                    <Value>Passw0rd!</Value>
+                    <PlainText>true</PlainText>
                 </AdministratorPassword>
                 <LocalAccounts>
+                    <!-- Set Administrator Password on Local -->
                     <LocalAccount wcm:action="add">
                         <Password>
-                            <Value>UABhAHMAcwB3ADAAcgBkACEAUABhAHMAcwB3AG8AcgBkAA==</Value>
-                            <PlainText>false</PlainText>
+                            <Value>Passw0rd!</Value>
+                            <PlainText>true</PlainText>
                         </Password>
                         <Description>Local Administrator Account</Description>
                         <DisplayName>Administrator</DisplayName>
@@ -100,9 +112,9 @@
             </UserAccounts>
         </component>
         <component name="Microsoft-Windows-International-Core" processorArchitecture="wow64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-            <UILanguage>en-US</UILanguage>
-            <UserLocale>en-US</UserLocale>
-            <SystemLocale>en-US</SystemLocale>
+            <UILanguage>ja-JP</UILanguage>
+            <UserLocale>ja-JP</UserLocale>
+            <SystemLocale>ja-JP</SystemLocale>
         </component>
     </settings>
     <settings pass="specialize">
@@ -111,16 +123,17 @@
         </component>
         <component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <RunSynchronous>
+                <!-- Install VMWareTools silently  -->
                 <RunSynchronousCommand wcm:action="add">
                     <Path>D:\CustomFolder\setup64.exe /S /v"/qn REBOOT=R"</Path>
                     <Order>1</Order>
                 </RunSynchronousCommand>
+                <!-- Eject currently mounted on CD-ROM Drive -->
                 <RunSynchronousCommand wcm:action="add">
                     <Order>2</Order>
-                    <Path>cmd /c winrm quickconfig -q -transport:http</Path>
+                    <Path>powershell -c (New-Object -com "WMPlayer.OCX.7").cdromcollection.item(0).eject()</Path>
                 </RunSynchronousCommand>
             </RunSynchronous>
         </component>
     </settings>
-    <cpi:offlineImage cpi:source="wim:g:/autoiso_new/en/install.wim#Windows Server 2019 SERVERDATACENTER" xmlns:cpi="urn:schemas-microsoft-com:cpi" />
 </unattend>
